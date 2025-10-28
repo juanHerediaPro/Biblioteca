@@ -61,7 +61,7 @@ public class AuthorNationalityService implements IAuthorNationalityInterface {
         Optional<AuthorsNationality> authorsNationality = iAuthorNationalityRepository.findByNationality(nationality);
 
         if (authorsNationality.isEmpty()){
-            return new ResponseEntity<>("there are not nationalities registered with this name", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("there are nott nationalities registered with this name", HttpStatus.NOT_FOUND);
         } else {
             iAuthorNationalityRepository.delete(authorsNationality.get());
             response.put("user delete successfully",authorsNationality);
