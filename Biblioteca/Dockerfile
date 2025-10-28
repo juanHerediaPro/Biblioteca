@@ -9,13 +9,11 @@ WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 COPY mvnw .
-# *** LÍNEA CORREGIDA AÑADIDA AQUÍ ***
 RUN chmod +x mvnw
-# ***********************************
 COPY .mvn ./.mvn
 
-# Compila el proyecto
-RUN ./mvnw package -DskipTests
+# Limpia y compila el proyecto (CRÍTICO: Añadir 'clean')
+RUN ./mvnw clean package -DskipTests
 
 # ====================================================
 # Etapa 2: EJECUCIÓN (Runtime) - CRÍTICA
