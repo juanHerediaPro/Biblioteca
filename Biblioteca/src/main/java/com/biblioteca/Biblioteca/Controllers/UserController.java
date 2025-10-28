@@ -21,7 +21,7 @@ public class UserController {
         this.iUserServiceInterface = iUserServiceInterface;
     }
 
-    @PostMapping("/users/create")
+    @PostMapping("/users")
     public ResponseEntity<Object> createUser(@RequestBody User user){
         return iUserServiceInterface.createUser(user);
     }
@@ -31,7 +31,7 @@ public class UserController {
     }
     
     // Dejar /all si quieres mantenerlo, o eliminar el mapeo si solo quieres el nuevo
-    @GetMapping("/users/all")
+    @GetMapping("/users")
     public ResponseEntity<Object> getAllUsers(){
         return iUserServiceInterface.getAllUsers();
     }
