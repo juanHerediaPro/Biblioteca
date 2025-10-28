@@ -18,16 +18,17 @@ COPY .mvn ./.mvn
 RUN ./mvnw package -DskipTests
 
 # ====================================================
-# Etapa 2: EJECUCIÓN (Runtime)
+# Etapa 2: EJECUCIÓN (Runtime) - CRÍTICA
 # ====================================================
 FROM eclipse-temurin:17-jre-focal
 
 WORKDIR /app
 
-# NOTA: Cambiamos 'app.jar' a '*SNAPSHOT.jar'
-# Esto asume que el nombre de tu JAR terminado es 'Biblioteca-X.X.X-SNAPSHOT.jar'
+# Copia el JAR generado
 COPY --from=builder /app/target/*.jar app.jar
 
-# Ejecuta la aplicación. Añadimos el contexto de servidor explícito.
-# La bandera server.address=0.0.0.0 es crucial para contenedores
-ENTRYPOINT ["java", "-jar", "app.jar", "--server.address=0.0.0.0"]
+# Define el puerto de Cloud Run (8080)
+ENV PORT 8080
+
+# Ejecuta la aplicación de forma robusta
+ENTRYPOINT ["java", "-Dserver.port=${PORT}", "-jar", "/app.jar"]
