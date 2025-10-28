@@ -26,7 +26,8 @@ WORKDIR /app
 
 # Copia el JAR generado con su nombre exacto
 # Reemplaza 'Biblioteca-0.0.1-SNAPSHOT.jar' con el nombre que está en tu target/
-COPY --from=builder /app/target/Biblioteca-0.0.1-SNAPSHOT.jar app.jar
+# En la Etapa 2 de tu Dockerfile, usa el nombre 'app.jar'
+COPY --from=builder /app/target/app.jar app.jar
 
 # Define el puerto de Cloud Run (8080)
 ENV PORT 8080
