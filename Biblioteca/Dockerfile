@@ -5,10 +5,13 @@ FROM maven:3.9.4-eclipse-temurin-17-focal AS builder
 
 WORKDIR /app
 
-# Copia los archivos necesarios para la compilación (relativo a la ubicación del Dockerfile)
+# Copia los archivos necesarios para la compilación
 COPY pom.xml .
 COPY src ./src
 COPY mvnw .
+# *** LÍNEA CORREGIDA AÑADIDA AQUÍ ***
+RUN chmod +x mvnw
+# ***********************************
 COPY .mvn ./.mvn
 
 # Compila el proyecto
