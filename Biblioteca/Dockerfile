@@ -24,8 +24,9 @@ FROM eclipse-temurin:17-jre-focal
 
 WORKDIR /app
 
-# Copia el JAR generado
-COPY --from=builder /app/target/*.jar app.jar
+# Copia el JAR generado con su nombre exacto
+# Reemplaza 'Biblioteca-0.0.1-SNAPSHOT.jar' con el nombre que está en tu target/
+COPY --from=builder /app/target/Biblioteca-0.0.1-SNAPSHOT.jar app.jar
 
 # Define el puerto de Cloud Run (8080)
 ENV PORT 8080
