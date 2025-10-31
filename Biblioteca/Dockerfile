@@ -16,19 +16,17 @@ COPY .mvn ./.mvn
 RUN ./mvnw clean package -DskipTests
 
 # ====================================================
-# Etapa 2: EJECUCIÓN (Runtime) - CRÍTICA
+# Etapa 2: EJECUCIÓN (Runtime) - CORREGIDA
 # ====================================================
 FROM eclipse-temurin:17-jre-focal
 
 WORKDIR /app
 
-# Copia el JAR generado con su nombre exacto
-# Reemplaza 'Biblioteca-0.0.1-SNAPSHOT.jar' con el nombre que está en tu target/
-# En la Etapa 2 de tu Dockerfile, usa el nombre 'app.jar'
-COPY --from=builder /app/target/app.jar app.jar
+# Corregido: Reemplaza el nombre genérico 'app.jar' por el nombre REAL del JAR que genera tu proyecto (Biblioteca-0.0.1-SNAPSHOT.jar)
+# Y renómbralo a 'app.jar' para el ENTRYPOINT.
+# (Asegúrate que el nombre 'Biblioteca-0.0.1-SNAPSHOT.jar' es el que Maven crea en tu caso)
+COPY --from=builder /app/target/Biblioteca-0.0.1-SNAPSHOT.jar app.jar
 
-# Define el puerto de Cloud Run (8080)
-ENV PORT 8080
 
 # Ejecuta la aplicación de forma robusta
 ENTRYPOINT ["java", "-Dserver.port=${PORT}", "-jar", "/app.jar"]
