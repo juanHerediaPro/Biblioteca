@@ -12,7 +12,7 @@ COPY mvnw .
 RUN chmod +x mvnw
 COPY .mvn ./.mvn
 
-# Limpia y compila el proyecto (CRÍTICO: Añadir 'clean')
+# Limpia y  compila el proyecto (CRÍTICO: Añadir 'clean')
 RUN ./mvnw clean package -DskipTests
 
 # ====================================================
