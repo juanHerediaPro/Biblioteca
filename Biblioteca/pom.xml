@@ -77,7 +77,8 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <finalName>app</finalName> 
+                    <finalName>app</finalName>
+                    <skip>true</skip> 
                 </configuration>
                 <executions>
                     <execution>
@@ -87,6 +88,10 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                </plugin>
         </plugins>
     </build>
 
