@@ -25,7 +25,7 @@ WORKDIR /app
 # Corregido: Reemplaza el nombre genérico 'app.jar' por el nombre REAL del JAR que genera tu proyecto (Biblioteca-0.0.1-SNAPSHOT.jar)
 # Y renómbralo a 'app.jar' para el ENTRYPOINT.
 # (Asegúrate que el nombre 'Biblioteca-0.0.1-SNAPSHOT.jar' es el que Maven crea en tu caso)
-COPY --from=builder /app/target/Biblioteca-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=builder /app/target/app.jar app.jar
 
 
 # Ejecuta la aplicación de forma robusta
