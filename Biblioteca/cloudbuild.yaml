@@ -1,0 +1,48 @@
+steps:
+  # 1. COMPILAR EL PROYECTO Y CONSTRUIR LA IMAGEN DE DOCKER
+  # CRÍTICO: El 'dir: Biblioteca' asegura que se encuentre el Dockerfile y el pom.xml.
+  - name: gcr.io/cloud-builders/docker
+    id: Build Biblioteca Image
+    dir: Biblioteca
+    args:
+      [
+        "build",
+        "-t",
+        "us-central1-docker.pkg.dev/practica2-477009/imagenes/biblioteca-service:latest",
+        "."
+      ]
+
+  # 2. EMPUJAR LA IMAGEN AL ARTIFACT REGISTRY
+  - name: gcr.io/cloud-builders/docker
+    id: Push Biblioteca Image
+    args:
+      [
+        "push",
+        "us-central1-docker.pkg.dev/practica2-477009/imagenes/biblioteca-service:latest"
+      ]
+
+  # 3. DESPLEGAR EL SERVICIO EN CLOUD RUN CON VARIABLES DE ENTORNO Y CONEXIÓN
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    id: Deploy Biblioteca to Cloud Run
+    entrypoint: gcloud
+    args:
+      [
+        "run", "deploy", "biblioteca-service",
+        "--image=us-central1-docker.pkg.dev/practica2-477009/imagenes/biblioteca-service:latest",
+        "--region=us-central1",
+        "--platform=managed",
+        "--allow-unauthenticated",
+
+        # CONEXIÓN A POSTGRESQL del nuevo proyecto
+        "--add-cloudsql-instances", "practica2-477009:us-central1:id-postgres-bd",
+
+        # VARIABLES DE ENTORNO (Credenciales para Spring Boot)
+        "--set-env-vars", "DB_USERNAME=JuanDavid,DB_PASSWORD=Juan1010962..,DB_NAME=biblioteca"
+      ]
+
+images:
+  - "us-central1-docker.pkg.dev/practica2-477009/imagenes/biblioteca-service:latest"
+
+# OPCIÓN DE LOGGING SOLICITADA
+options:
+  logging: CLOUD_LOGGING_ONLY
