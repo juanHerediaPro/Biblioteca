@@ -32,15 +32,17 @@ steps:
         "--region=us-central1",
         "--platform=managed",
         "--allow-unauthenticated",
-        
-        # AÑADIDO: Darle 5 minutos (300 segundos) para que el contenedor inicie
-        "--timeout=300", 
+        "--timeout=300", # Mantenemos el timeout largo
 
-        # CONEXIÓN A POSTGRESQL del nuevo proyecto
+        # CONEXIÓN A POSTGRESQL
         "--add-cloudsql-instances", "practica2-477009:us-central1:id-postgres-bd",
 
-        # VARIABLES DE ENTORNO (Credenciales para Spring Boot)
-        "--set-env-vars", "DB_USERNAME=JuanDavid,DB_PASSWORD=Juan1010962..,DB_NAME=biblioteca"
+        # === INYECCIÓN SEGURA DE SECRET MANAGER ===
+        # Cloud Run inyectará los secretos como variables de entorno DB_USERNAME y DB_PASSWORD
+        "--update-secrets", "DB_USERNAME=db_username_biblioteca:latest,DB_PASSWORD=db_password_biblioteca:latest",
+
+        # Variables de entorno restantes
+        "--set-env-vars", "DB_NAME=biblioteca"
       ]
 
 images:
