@@ -1,9 +1,8 @@
 steps:
   # 1. COMPILAR EL PROYECTO Y CONSTRUIR LA IMAGEN DE DOCKER
-  # CRÍTICO: El 'dir: Biblioteca' asegura que se encuentre el Dockerfile y el pom.xml.
   - name: gcr.io/cloud-builders/docker
     id: Build Biblioteca Image
-    dir: Biblioteca
+    dir: Biblioteca # CRÍTICO: Asegura que se encuentre el Dockerfile y el código.
     args:
       [
         "build",
@@ -21,7 +20,7 @@ steps:
         "us-central1-docker.pkg.dev/practica2-477009/imagenes/biblioteca-service:latest"
       ]
 
-# 3. DESPLEGAR EL SERVICIO EN CLOUD RUN CON VARIABLES DE ENTORNO Y CONEXIÓN
+  # 3. DESPLEGAR EL SERVICIO EN CLOUD RUN (SIN INYECCIÓN DE VARIABLES)
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     id: Deploy Biblioteca to Cloud Run
     entrypoint: gcloud
@@ -34,20 +33,13 @@ steps:
         "--allow-unauthenticated",
         "--timeout=300", # Mantenemos el timeout largo
 
-        # CONEXIÓN A POSTGRESQL
-        "--add-cloudsql-instances", "practica2-477009:us-central1:id-postgres-bd",
-
-        # === INYECCIÓN SEGURA DE SECRET MANAGER ===
-        # Cloud Run inyectará los secretos como variables de entorno DB_USERNAME y DB_PASSWORD
-        "--update-secrets", "DB_USERNAME=db_username_biblioteca:latest,DB_PASSWORD=db_password_biblioteca:latest",
-
-        # Variables de entorno restantes
-        "--set-env-vars", "DB_NAME=biblioteca"
+        # CRÍTICO: SOLO DEJAMOS LA HABILITACIÓN DEL CLOUD SQL PROXY.
+        # Ya no necesitamos --set-env-vars ni --update-secrets.
+        "--add-cloudsql-instances", "practica2-477009:us-central1:id-postgres-bd"
       ]
 
 images:
   - "us-central1-docker.pkg.dev/practica2-477009/imagenes/biblioteca-service:latest"
 
-# OPCIÓN DE LOGGING SOLICITADA
 options:
   logging: CLOUD_LOGGING_ONLY
