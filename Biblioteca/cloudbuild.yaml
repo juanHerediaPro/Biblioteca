@@ -21,7 +21,7 @@ steps:
         "us-central1-docker.pkg.dev/practica2-477009/imagenes/biblioteca-service:latest"
       ]
 
-  # 3. DESPLEGAR EL SERVICIO EN CLOUD RUN CON VARIABLES DE ENTORNO Y CONEXIÓN
+# 3. DESPLEGAR EL SERVICIO EN CLOUD RUN CON VARIABLES DE ENTORNO Y CONEXIÓN
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     id: Deploy Biblioteca to Cloud Run
     entrypoint: gcloud
@@ -32,6 +32,9 @@ steps:
         "--region=us-central1",
         "--platform=managed",
         "--allow-unauthenticated",
+        
+        # AÑADIDO: Darle 5 minutos (300 segundos) para que el contenedor inicie
+        "--timeout=300", 
 
         # CONEXIÓN A POSTGRESQL del nuevo proyecto
         "--add-cloudsql-instances", "practica2-477009:us-central1:id-postgres-bd",
